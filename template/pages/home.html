@@ -1,0 +1,497 @@
+{%extends 'base.html'%}
+{%block title%}
+{{user.username|title}}
+{%endblock%}
+<style>
+    
+</style>
+{%block content%}
+<style>
+  hr{
+   background-color: white;
+    width: 200px;
+  }
+label{
+    padding: 10px;
+}
+.box {
+    padding: 0 5px 0 5px;
+}
+</style>
+<!-- hi {{user.username}} -->
+	<div class="container">
+            <div class="row" style="margin-top:10px;" >
+            <div class="col-md-4 h5">Welcome&nbsp;<span style="color: brown"><strong>{{user.username|capfirst}}</strong></span></div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <form action="/{{user.username}}" method="post" >
+                    {%csrf_token%}
+                <input type="submit" class="btn btn-danger" value="Logout" name="Logout" style="float: right"></input>
+            </form>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+              {% include '_alerts.html'%}
+          </div>
+            
+        </div>
+        
+            <div class="row" >
+                <div class="col-md-3 "></div>
+                <div class="col-md-6 text-center" style="border-radius: 30px;" >
+           
+            <form style="background: linear-gradient(to right, #569e440f, #5a4f5285);border-radius: 35px; " id="contact-form" method="post" action="/{{user.username}}" role="form">
+                {%csrf_token%}
+                 <div class="controls">
+                
+                        <div class="row">
+                          <div class="col-md-2"></div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <div class="form-label-group">
+                                    <label for="AddReminder_description">Reminder Description:</label>
+                                    <textarea style="background-color: #dbe3ea;border:solid 1px white" id="AddReminder_description" name="addReminder_description" class="form-control" placeholder="Add reminder"rows="3"
+                                     required="required" data-error="reminder must have a description"></textarea>
+                                     </div>
+                                     <hr>
+                                     <div class="form-label-group">
+                                     <label for="Reminder_date">Reminder Date:</label>
+                                    <input style="background-color: #dbe3ea;border:solid 1px white" class="form-control" required="required" name="Reminder_date" id="Reminder_date" type="datetime-local">
+                                  </div>
+                                  <hr>
+                                  <div class="form-label-group">
+                                    <label for="Reminder_status">Reminder Status:</label><br>
+                                    <input type="checkbox" name="Reminder_status" id="Reminder_status">&nbsp; Enable
+                                  </div>
+                                  <hr>
+                                  <br>
+                                  <input type="submit" id="addReminder" name="addReminder" class="btn btn-success" value="Add Reminder">
+                                  
+                                </div>
+                            </div>
+                            
+                               
+                            
+                            
+                        </div>
+                    </div>
+                
+            </form>
+            
+        </div>
+            
+            </div>
+            <div class="row" style="margin-top:10px;">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6 text-center">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                              <div class="col-md-8">
+                            <div class="h1"><strong>Your Reminders</strong></div>
+                            </div>
+                            </div>
+                    </div>
+            
+
+            </div>
+            <section class="grid ">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6 text-center">
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                      <div class="col-md-8">
+                                        <hr style="background-color:#0062E6">
+                                          <div class="h4"><strong>Enabled Reminders</strong></div> 
+                                          <hr style="background-color:#0062E6">
+                                    </div>
+                                    </div>
+                            </div>
+                    
+        
+                    </div>
+                              
+            {% if Reminders %}
+            
+            <div  class="row" style="padding: 5px;">
+            {% for reminder in Reminders%}
+            
+            <div class="col-md-4  box text-center" style="height: 200px;border-left: solid 2.5px  #ffffff;border-right: solid 2.5px  #ffffff;margin-top: 5px;background-color:#ade6d52e;border-radius: 35px" > 
+                    
+                    <div class="media-body">
+                            <div style="overflow: scroll;height: 65px">  
+                           <p >{{reminder.reminderdescription}}
+                             <br>
+                            
+                           </p>
+                          </div> 
+                           <p style="margin-top: 5px"><strong>{{reminder.reminderdue}}</strong></p>
+                               <!-- <div class="clear"></div> -->
+                               
+                           <div style="margin-top: 25px;"> 
+                                
+                                <br>
+                                   <Button data-toggle="modal" data-target="#View{{reminder.pk}}" style="margin-left: 4px;" type="button" class="btn btn-success" >View</Button>
+                                   <Button data-toggle="modal" data-target="#Edit{{reminder.pk}}" style=" margin-left: 4px;" type="button" class="btn btn-primary" >Edit</Button>
+                                   <Button data-toggle="modal" data-target="#Delete{{reminder.pk}}" style="margin-left: 4px;"  class="btn btn-danger">Delete</Button>
+
+                                   
+                                </div>
+                       </div>
+                   
+                    </div>
+                    <div id="View{{reminder.pk}}" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                          
+                              <!-- Modal content-->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                                  
+                                </div>
+                                <div class="modal-body">
+                                 Description:<br>
+                                  <p>{{reminder.reminderdescription}}</p>
+                                Reminder time:<br>
+                                <p>{{reminder.reminderdue}}</p>
+                                Time created:
+                                <p>{{reminder.remindertime}}</p>
+
+                                Status:
+                                <p>
+                                       {%if reminder.reminderstatus%} 
+                                            Enabled
+                                        {%else%}
+                                        Disabled
+                                       {%endif%}
+                                    
+                                </p>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                          
+                            </div>
+                          </div>
+                          <div id="Edit{{reminder.pk}}" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+                              
+                                  <!-- Modal content-->
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                                      
+                                    </div>
+                                    <div class="modal-body">
+                                            <form id="edit-form" method="post" action="/{{user.username}}" role="form">
+                                                {%csrf_token%}
+                                                 <div class="controls">
+                                                
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="Reminder_description">Reminder Description</label>
+                                                                    <textarea  id="editReminder_description" name="editReminder_description" class="form-control" placeholder="Add reminder"rows="3"
+                                                                      data-error="reminder must have a description">{{reminder.reminderdescription}}</textarea>
+                                                                     <br>
+                                                                     <label>Reminder Date/Time</label><br>
+                                                                    <p>{{reminder.reminderdue}}</p>
+                                                                    <label for="editReminder_date">New Date/Time</label>
+                                                                    <input class="form-control" name="editReminder_date" id="editReminder_date" type="datetime-local">
+                                                                    <label for="Reminder_date">Reminder Status</label><br>
+                                                                    <input type="checkbox" name="editReminder_status" {%if reminder.reminderstatus%} 
+                                                                    checked{%endif%} > Enabled
+                                                                    <input type="text" name="Reminder_id" hidden value="{{reminder.pk}}">
+                                                                    <div class="help-block with-errors"></div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-12">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                
+                                            
+                                    </div>
+                                    <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success" name="Edit" >Make Changes</button>
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </form>
+                                  </div>
+                              
+                                </div>
+                              </div>
+                          
+                              <div id="Delete{{reminder.pk}}" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                  
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                                          
+                                        </div>
+                                        <div class="modal-body">
+                                            <h1>Do you really want to delete this reminder?</h1>
+                                         Description:<br>
+                                          <p>{{reminder.reminderdescription}}</p>
+                                        Reminder time:<br>
+                                        <p>{{reminder.reminderdue}}</p>
+                                        Time created:
+                                        <p>{{reminder.remindertime}}</p>
+        
+                                        Status:
+                                        <p>
+                                               {%if reminder.reminderstatus%} 
+                                                    Enabled
+                                                {%else%}
+                                                Disabled
+                                               {%endif%}
+                                            
+                                        </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form id="delete-form" method="post" action="/{{user.username}}" role="form">
+                                                {%csrf_token%}
+                                                <input type="text" name="deleteReminder_id" hidden value="{{reminder.pk}}">
+                                                <button type="submit" class="btn btn-danger" name="Delete" >Delete</button>
+                                            </form>
+                                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                      </div>
+                                  
+                                    </div>
+                                  </div>
+            {%endfor%}
+        </div>
+        
+    </div>
+    </section>
+
+            {%else%}
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 text-center">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                          <div class="col-md-8">
+                              <div class="h5" style="color: crimson">No enabled Reminders Yet</div>
+                             
+                        </div>
+                        </div>
+                </div>
+        
+
+        </div>
+            {%endif%}
+            
+            <section class="grid ">
+              <div class="container">
+                  <div class="row">
+                      <div class="col-md-3"></div>
+                      <div class="col-md-6 text-center">
+                          <div class="row">
+                              <div class="col-md-2"></div>
+                                <div class="col-md-8">
+                                    <hr style="background-color:#0062E6">
+                                    <div class="h4"><strong>Disabled Reminders</strong></div> 
+                                    <hr style="background-color:#0062E6">
+                              </div>
+                              </div>
+                      </div>
+              
+  
+              </div>
+            
+            {% if Disabledreminders %}
+            <div  class="row" style="padding: 5px;">
+
+            {% for reminder in Disabledreminders%}
+            <div class="col-md-4 box text-center" style="height: 200px;border-left: solid 2.5px  #ffffff;border-right: solid 2.5px  #ffffff;margin-top: 5px;background-color:#eac1c14d;border-radius: 35px" > 
+                    
+                    <div class="media-body">
+                               <div style="overflow: scroll;height: 65px">
+                           <p>{{reminder.reminderdescription}}</p>
+                          </div>
+                               <!-- <div class="clear"></div> -->
+                               <p style="margin-top: 5px"><strong>{{reminder.reminderdue}}</strong></p>
+                              
+                           <div style="margin-top: 25px;"> 
+                                
+                                <br>
+                                <Button data-toggle="modal" data-target="#View{{reminder.pk}}" style="margin-left: 4px;" type="button" class="btn btn-success" >View</Button>
+                                <Button data-toggle="modal" data-target="#Edit{{reminder.pk}}" style=" margin-left: 4px;" type="button" class="btn btn-primary" >Edit</Button>
+                                <Button data-toggle="modal" data-target="#Delete{{reminder.pk}}" style="margin-left: 4px;"  class="btn btn-danger">Delete</Button>
+
+                                </div>
+                       </div>
+                   
+                    </div>
+                    <div id="View{{reminder.pk}}" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                          
+                              <!-- Modal content-->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                                  
+                                </div>
+                                <div class="modal-body">
+                                 Description:<br>
+                                  <p>{{reminder.reminderdescription}}</p>
+                                Reminder time:<br>
+                                <p>{{reminder.reminderdue}}</p>
+                                Time created:
+                                <p>{{reminder.remindertime}}</p>
+
+                                Status:
+                                <p>
+                                       {%if reminder.reminderstatus%} 
+                                            Enabled
+                                        {%else%}
+                                        Disabled
+                                       {%endif%}
+                                    
+                                </p>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                          
+                            </div>
+                          </div>
+                          <div id="Edit{{reminder.pk}}" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+                              
+                                  <!-- Modal content-->
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                                      
+                                    </div>
+                                    <div class="modal-body">
+                                            <form id="edit-form" method="post" action="/{{user.username}}" role="form">
+                                                {%csrf_token%}
+                                                 <div class="controls">
+                                                
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="Reminder_description">Reminder Description</label>
+                                                                    <textarea  id="editReminder_description" name="editReminder_description" class="form-control" placeholder="Add reminder"rows="3"
+                                                                      data-error="reminder must have a description">{{reminder.reminderdescription}}</textarea>
+                                                                     <br>
+                                                                     <label>Reminder Date/Time</label><br>
+                                                                    <p>{{reminder.reminderdue}}</p>
+                                                                    <label for="editReminder_date">New Date/Time</label>
+                                                                    <input class="form-control" name="editReminder_date" id="editReminder_date" type="datetime-local">
+                                                                    <label for="Reminder_date">Reminder Status</label><br>
+                                                                    <input type="checkbox" name="editReminder_status" {%if reminder.reminderstatus%} 
+                                                                    checked{%endif%} > Enabled
+                                                                    <input type="text" name="Reminder_id" hidden value="{{reminder.pk}}">
+                                                                    <div class="help-block with-errors"></div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-12">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                
+                                            
+                                    </div>
+                                    <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success" name="Edit" >Make Changes</button>
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </form>
+                                  </div>
+                              
+                                </div>
+                              </div>
+                          
+                              <div id="Delete{{reminder.pk}}" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                  
+                                      <!-- Modal content-->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                                          
+                                        </div>
+                                        <div class="modal-body">
+                                            <h1>Do you really want to delete this reminder?</h1>
+                                         Description:<br>
+                                          <p>{{reminder.reminderdescription}}</p>
+                                        Reminder time:<br>
+                                        <p>{{reminder.reminderdue}}</p>
+                                        Time created:
+                                        <p>{{reminder.remindertime}}</p>
+        
+                                        Status:
+                                        <p>
+                                               {%if reminder.reminderstatus%} 
+                                                    Enabled
+                                                {%else%}
+                                                Disabled
+                                               {%endif%}
+                                            
+                                        </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form id="delete-form" method="post" action="/{{user.username}}" role="form">
+                                                {%csrf_token%}
+                                                <input type="text" name="deleteReminder_id" hidden value="{{reminder.pk}}">
+                                                <button type="submit" class="btn btn-success" name="Delete" >Delete</button>
+                                            </form>
+                                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                      </div>
+                                  
+                                    </div>
+                                  </div>
+            {%endfor%}
+            </div>
+      </div>
+    </section>
+        <hr/> 
+    
+
+            {%else%}
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 text-center">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                          <div class="col-md-8">
+                              <div class="h5" style="color: crimson">No Disabled Reminders yet</div>
+                             
+                        </div>
+                        </div>
+                </div>
+        
+
+        </div>
+            {%endif%}
+            
+
+          
+            
+          </div>
+        <!-- <div class="col-sm-3">right</div>
+</div>	
+            <div class="clear"></div> -->
+                            
+		
+        
+
+{%endblock%}
