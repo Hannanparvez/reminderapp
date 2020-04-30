@@ -7,6 +7,13 @@
 </style>
 {%block content%}
 <style>
+  body{
+    color: white;
+    background:linear-gradient(to right, #0062E6, #33AEFF);
+  }
+  .modal-content{
+    background:linear-gradient(to right, #0062E6, #33AEFF);
+  }
   hr{
    background-color: white;
     width: 200px;
@@ -19,14 +26,16 @@ label{
 }
 </style>
 <!-- hi {{user.username}} -->
+<div class="col-md-4 h4" style="margin-top: 10px;">Welcome&nbsp;<span style="color: brown"><strong>{{user.username|capfirst}}</strong></span></div>
+<input type="submit" class="btn btn-danger" value="Logout" name="Logout" style="position: absolute;right: 20px;top: 10px;"></input>
 	<div class="container">
             <div class="row" style="margin-top:10px;" >
-            <div class="col-md-4 h5">Welcome&nbsp;<span style="color: brown"><strong>{{user.username|capfirst}}</strong></span></div>
+            
             <div class="col-md-4"></div>
             <div class="col-md-4">
                 <form action="/{{user.username}}" method="post" >
                     {%csrf_token%}
-                <input type="submit" class="btn btn-danger" value="Logout" name="Logout" style="float: right"></input>
+                
             </form>
             </div>
         </div>
@@ -43,7 +52,7 @@ label{
                 <div class="col-md-3 "></div>
                 <div class="col-md-6 text-center" style="border-radius: 30px;" >
            
-            <form style="background: linear-gradient(to right, #569e440f, #5a4f5285);border-radius: 35px; " id="contact-form" method="post" action="/{{user.username}}" role="form">
+            <form style="border-radius: 35px;border-right: 1px solid;border-left: 1px solid;" id="contact-form" method="post" action="/{{user.username}}" role="form">
                 {%csrf_token%}
                  <div class="controls">
                 
@@ -53,13 +62,13 @@ label{
                                 <div class="form-group">
                                     <div class="form-label-group">
                                     <label for="AddReminder_description">Reminder Description:</label>
-                                    <textarea style="background-color: #dbe3ea;border:solid 1px white" id="AddReminder_description" name="addReminder_description" class="form-control" placeholder="Add reminder"rows="3"
+                                    <textarea style="margin: auto; width: 300px;background-color: #fff;border:solid 1px white" id="AddReminder_description" name="addReminder_description" class="form-control" placeholder="Add reminder"rows="3"
                                      required="required" data-error="reminder must have a description"></textarea>
                                      </div>
                                      <hr>
                                      <div class="form-label-group">
                                      <label for="Reminder_date">Reminder Date:</label>
-                                    <input style="background-color: #dbe3ea;border:solid 1px white" class="form-control" required="required" name="Reminder_date" id="Reminder_date" type="datetime-local">
+                                    <input style="margin: auto;width: 300px;background-color: #fff;border:solid 1px white" class="form-control" required="required" name="Reminder_date" id="Reminder_date" type="datetime-local">
                                   </div>
                                   <hr>
                                   <div class="form-label-group">
@@ -105,9 +114,9 @@ label{
                                 <div class="row">
                                     <div class="col-md-2"></div>
                                       <div class="col-md-8">
-                                        <hr style="background-color:#0062E6">
+                                        <hr style="background-color:#fff">
                                           <div class="h4"><strong>Enabled Reminders</strong></div> 
-                                          <hr style="background-color:#0062E6">
+                                          <hr style="background-color:#fff">
                                     </div>
                                     </div>
                             </div>
@@ -120,7 +129,7 @@ label{
             <div  class="row" style="padding: 5px;">
             {% for reminder in Reminders%}
             
-            <div class="col-md-4  box text-center" style="height: 200px;border-left: solid 2.5px  #ffffff;border-right: solid 2.5px  #ffffff;margin-top: 5px;background-color:#ade6d52e;border-radius: 35px" > 
+            <div style="width: 330px; height: 250px; margin: 10px auto;display: block; padding: 5px;overflow: hidden;text-align: center;border-left: solid 1px  #ffffff;border-right: solid 1px  #ffffff;margin-top: 5px;background-color:#4cce4c;border-radius: 35px" > 
                     
                     <div class="media-body">
                             <div style="overflow: scroll;height: 65px">  
@@ -202,7 +211,7 @@ label{
                                                                      <label>Reminder Date/Time</label><br>
                                                                     <p>{{reminder.reminderdue}}</p>
                                                                     <label for="editReminder_date">New Date/Time</label>
-                                                                    <input class="form-control" name="editReminder_date" id="editReminder_date" type="datetime-local">
+                                                                    <input class="form-control" name="editReminder_date" id="editReminder_date" type="datetime">
                                                                     <label for="Reminder_date">Reminder Status</label><br>
                                                                     <input type="checkbox" name="editReminder_status" {%if reminder.reminderstatus%} 
                                                                     checked{%endif%} > Enabled
@@ -300,9 +309,9 @@ label{
                           <div class="row">
                               <div class="col-md-2"></div>
                                 <div class="col-md-8">
-                                    <hr style="background-color:#0062E6">
+                                    <hr style="background-color:#fff">
                                     <div class="h4"><strong>Disabled Reminders</strong></div> 
-                                    <hr style="background-color:#0062E6">
+                                    <hr style="background-color:#fff">
                               </div>
                               </div>
                       </div>
@@ -314,7 +323,7 @@ label{
             <div  class="row" style="padding: 5px;">
 
             {% for reminder in Disabledreminders%}
-            <div class="col-md-4 box text-center" style="height: 200px;border-left: solid 2.5px  #ffffff;border-right: solid 2.5px  #ffffff;margin-top: 5px;background-color:#eac1c14d;border-radius: 35px" > 
+            <div class="box text-center" style="width: 330px; height: 250px; margin: 10px auto;display: block; padding: 5px;overflow: hidden;text-align: center;border-left: solid 1px  #ffffff;border-right: solid 1px  #ffffff;margin-top: 5px;background-color:#d47171;border-radius: 35px" > 
                     
                     <div class="media-body">
                                <div style="overflow: scroll;height: 65px">
